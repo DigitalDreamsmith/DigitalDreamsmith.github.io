@@ -215,8 +215,13 @@
             </div>
             <div class="terminal-title">louis@portfolio:~$</div>
         </div>
-        <div class="terminal-content" id="content">
-            <!-- Initial ASCII art or output here if needed -->
+        <div class="terminal-content" id="content">            
+██╗      ██████╗ ██╗   ██╗██╗███████╗    ██╗  ██╗██╗      █████╗ ██╗██████╗ ███████╗██████╗ 
+██║     ██╔═══██╗██║   ██║██║██╔════╝    ██║ ██╔╝██║     ██╔══██╗██║██╔══██╗██╔════╝██╔══██╗
+██║     ██║   ██║██║   ██║██║███████╗    █████╔╝ ██║     ███████║██║██████╔╝█████╗  ██████╔╝
+██║     ██║   ██║██║   ██║██║╚════██║    ██╔═██╗ ██║     ██╔══██║██║██╔══██╗██╔══╝  ██╔══██╗
+███████╗╚██████╔╝╚██████╔╝██║███████║    ██║  ██╗███████╗██║  ██║██║██████╔╝███████╗██║  ██║
+╚══════╝ ╚═════╝  ╚═════╝ ╚═╝╚══════╝    ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═╝╚═════╝ ╚══════╝╚═╝  ╚═╝
         </div>
         <div class="interactive-line">
             <span class="prompt">louis@portfolio:~$</span> 
@@ -330,6 +335,7 @@
             content.appendChild(output);
             content.scrollTop = content.scrollHeight;
             commandInput.focus();
+            content.scrollTop = content.scrollHeight;
         }
 
         commandInput.focus();
