@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Louis Klaiber - Terminal</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            font-family: 'JetBrains Mono', monospace;
+            background: #0d1117;
+            color: #c9d1d9;
+        }
+
+        .terminal {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            height: 100vh;
+            background: #0d1117;
+        }
+
+        .terminal-header {
+            background: #21262d;
+            border-bottom: 1px solid #30363d;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .terminal-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .terminal-button {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .close { background: #ff5f56; }
+        .minimize { background: #ffbd2e; }
+        .maximize { background: #27ca3f; }
+
+        .terminal-title {
+            color: #8b949e;
+            margin-left: 20px;
+            font-size: 14px;
+        }
+
+        .terminal-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            padding-bottom: 80px; /* Space for input line */
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        .prompt {
+            color: #7c3aed;
+            font-weight: bold;
+        }
+
+        .command {
+            color: #22d3ee;
+        }
+
+        .output {
+            margin-bottom: 20px;
+        }
+
+        .ascii-art {
+            color: #7c3aed;
+            font-size: 12px;
+            line-height: 1.2;
+            margin: 20px 0;
+            white-space: pre;
+        }
+
+        .section-title {
+            color: #f97316;
+            font-weight: bold;
+            margin: 20px 0 10px 0;
+            text-decoration: underline;
+        }
+
+        .info-line {
+            display: flex;
+            margin: 5px 0;
+        }
+
+        .info-label {
+            color: #10b981;
+            min-width: 120px;
+            font-weight: bold;
+        }
+
+        .info-value {
+            color: #c9d1d9;
+        }
+
+        .skill-category {
+            color: #06b6d4;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+
+        .skills {
+            color: #e5e7eb;
+            margin-left: 20px;
+        }
+
+        .job-title {
+            color: #fbbf24;
+            font-weight: bold;
+        }
+
+        .job-period {
+            color: #9ca3af;
+        }
+
+        .job-description {
+            margin-left: 20px;
+            margin-top: 5px;
+            color: #d1d5db;
+        }
+
+        .cursor {
+            animation: blink 1s infinite;
+            background: #c9d1d9;
+            width: 8px;
+            height: 16px;
+            display: inline-block;
+            margin-left: 2px;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        .command-input {
+            background: transparent;
+            border: none;
+            color: #c9d1d9;
+            font-family: inherit;
+            font-size: inherit;
+            outline: none;
+            width: 100%;
+        }
+
+        .interactive-line {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
+            background: #0d1117;
+            border-top: 1px solid #30363d;
+            padding: 20px;
+            z-index: 1000;
+        }
+
+        .help-section {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        .command-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .command-item {
+            color: #58a6ff;
+        }
+
+        @media (max-width: 768px) {
+            .terminal-content {
+                padding: 10px;
+                font-size: 12px;
+            }
+
+            .ascii-art {
+                font-size: 10px;
+            }
+
+            .command-input {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="terminal">
+        <div class="terminal-header">
+            <div class="terminal-buttons">
+                <div class="terminal-button close"></div>
+                <div class="terminal-button minimize"></div>
+                <div class="terminal-button maximize"></div>
+            </div>
+            <div class="terminal-title">louis@portfolio:~$</div>
+        </div>
+        <div class="terminal-content" id="content">
+            <!-- Initial ASCII art or output here if needed -->
+        </div>
+        <div class="interactive-line">
+            <span class="prompt">louis@portfolio:~$</span> 
+            <input type="text" class="command-input" id="commandInput" placeholder="Type 'help' for commands...">
+            <span class="cursor"></span>
+        </div>
+    </div>
+
+    <script>
+        const commandInput = document.getElementById('commandInput');
+        const content = document.getElementById('content');
+        const interactiveLine = document.querySelector('.interactive-line');
+
+        commandInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const command = this.value.trim().toLowerCase();
+                executeCommand(command);
+                this.value = '';
+            }
+        });
+
+        function executeCommand(command) {
+            const commandLine = document.createElement('div');
+            commandLine.className = 'output';
+            commandLine.innerHTML = `<span class="prompt">louis@portfolio:~$</span> <span class="command">${command}</span>`;
+            content.appendChild(commandLine);
+
+            const output = document.createElement('div');
+            output.className = 'output';
+
+            switch(command) {
+                case 'help':
+                    output.innerHTML = `
+                        <div class="help-section">
+                            <div class="section-title"># AVAILABLE COMMANDS</div>
+                            <div class="command-list">
+                                <div class="command-item">help - Show available commands</div>
+                                <div class="command-item">clear - Clear the terminal screen</div>
+                                <div class="command-item">whoami - Display user information</div>
+                                <div class="command-item">date - Show current date and time</div>
+                                <div class="command-item">uptime - System uptime information</div>
+                                <div class="command-item">contact - Display contact information</div>
+                                <div class="command-item">skills - Show technical skills</div>
+                                <div class="command-item">experience - Show work experience</div>
+                            </div>
+                        </div>
+                    `;
+                    break;
+
+                case 'clear':
+                    Array.from(content.children).forEach(child => {
+                        if (!child.classList.contains('interactive-line')) {
+                            content.removeChild(child);
+                        }
+                    });
+                    return;
+
+                case 'whoami':
+                    output.innerHTML = `
+                        <div class="info-line"><span class="info-label">User:</span><span class="info-value">Louis Klaiber</span></div>
+                        <div class="info-line"><span class="info-label">Role:</span><span class="info-value">IT Security & Cloud Infrastructure Specialist</span></div>
+                        <div class="info-line"><span class="info-label">Status:</span><span class="info-value">Available for new opportunities</span></div>
+                    `;
+                    break;
+
+                case 'date':
+                    const now = new Date();
+                    output.innerHTML = `<span class="info-value">${now.toString()}</span>`;
+                    break;
+
+                case 'uptime':
+                    output.innerHTML = `
+                        <span class="info-value">System has been running since: 08.06.2000</span><br>
+                        <span class="info-value">Experience: ${new Date().getFullYear() - 2018} years in IT</span>
+                    `;
+                    break;
+
+                case 'contact':
+                    output.innerHTML = `
+                        <div class="section-title"># CONTACT INFORMATION</div>
+                        <div class="info-line"><span class="info-label">Email:</span><span class="info-value">louisklaiber@protonmail.com</span></div>
+                        <div class="info-line"><span class="info-label">Phone:</span><span class="info-value">+49 1522 6178131</span></div>
+                        `;
+                    break;
+
+                case 'skills':
+                    output.innerHTML = `
+                        <div class="section-title"># TECHNICAL SKILLS</div>
+                        <div class="skill-category">Cloud & DevOps:</div>
+                        <div class="skills">AWS, Azure, Docker, Kubernetes, Terraform</div>
+                        <div class="skill-category">Security:</div>
+                        <div class="skills">Server Hardening, Container Security, Access Control</div>
+                        <div class="skill-category">Programming:</div>
+                        <div class="skills">Rust, C/C++, Golang, Java, PHP</div>
+                    `;
+                    break;
+
+                case 'experience':
+                    output.innerHTML = `
+                        <div class="section-title"># WORK EXPERIENCE SUMMARY</div>
+                        <div class="job-title">• CEO & Lead IT Consultant (2020-2023)</div>
+                        <div class="job-title">• IT System Administrator (2018-2022)</div>
+                        <div class="job-title">• Student Assistant (2019-2020)</div>
+                    `;
+                    break;
+
+                default:
+                    output.innerHTML = `<span style="color: #f87171;">Command not found: ${command}</span><br><span style="color: #9ca3af;">Type 'help' to see available commands</span>`;
+            }
+
+            content.appendChild(output);
+            content.scrollTop = content.scrollHeight;
+            commandInput.focus();
+        }
+
+        commandInput.focus();
+
+        document.addEventListener('click', function () {
+            commandInput.focus();
+        });
+    </script>
+</body>
+</html>
