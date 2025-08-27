@@ -64,6 +64,7 @@
             line-height: 1.6;
             font-size: 14px;
             scroll-behavior: smooth; /* Smooth scrolling */
+            box-sizing: border-box;
         }
 
         .prompt {
@@ -160,7 +161,7 @@
         }
 
         .interactive-line {
-            position: fixed;
+            position: sticky;
             bottom: 0;
             left: 0;
             right: 0;
@@ -170,6 +171,8 @@
             padding: 20px;
             z-index: 1000;
             box-sizing: border-box;
+            display: flex;
+            align-items: center;
         }
 
         .help-section {
