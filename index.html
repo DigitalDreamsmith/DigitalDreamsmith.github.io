@@ -262,7 +262,9 @@
                                 <div class="command-item">contact - Display contact information</div>
                                 <div class="command-item">skills - Show technical skills</div>
                                 <div class="command-item">experience - Show work experience</div>
+                                <div class="command-item">education - Show education information</div>
                                 <div class="command-item">projects - Show personal projects</div>
+                                <div class="command-item">languages - Show spoken languages</div>
                             </div>
                         </div>
                     `;
@@ -299,34 +301,43 @@
                 case 'contact':
                     output.innerHTML = `
                         <div class="section-title"># CONTACT INFORMATION</div>
-                        <div class="info-line"><span class="info-label">Email:</span><span class="info-value">louis.klaiber@example.com</span></div>
-                        <div class="info-line"><span class="info-label">Phone:</span><span class="info-value">+1234567890</span></div>
-                        <div class="info-line"><span class="info-label">LinkedIn:</span><span class="info-value">linkedin.com/in/louis-klaiber</span></div>
+                        <div class="info-line"><span class="info-label">Email:</span><span class="info-value">louisklaiber@protonmail.com</span></div>
+                        <div class="info-line"><span class="info-label">Phone:</span><span class="info-value">+49 1522 6178131</span></div>
                     `;
                     break;
 
                 case 'skills':
                     output.innerHTML = `
-                        <div class="skill-category"># Technical Skills</div>
-                        <div class="skills">Cloud Computing, IT Security, Python, Networking, Linux, AWS, GCP</div>
+                        <div class="section-title"># TECHNICAL SKILLS</div>
+                        <div class="skill-category">Cloud & DevOps:</div>
+                        <div class="skills">AWS, Azure, Docker, Kubernetes, Terraform</div>
+                        <div class="skill-category">Security:</div>
+                        <div class="skills">Server Hardening, Container Security, Access Control</div>
+                        <div class="skill-category">Programming:</div>
+                        <div class="skills">Rust, C/C++, Golang, Java, PHP</div>
                     `;
                     break;
 
                 case 'experience':
                     output.innerHTML = `
-                        <div class="section-title"># Experience</div>
-                        <div class="job-title">IT Security Engineer</div>
-                        <div class="job-period">2019 - Present</div>
-                        <div class="job-description">Worked with cloud infrastructure and security, ensuring compliance and resilience of critical systems.</div>
-                        <div class="job-title">Cloud Infrastructure Specialist</div>
-                        <div class="job-period">2018 - 2019</div>
-                        <div class="job-description">Implemented cloud solutions for a wide range of clients with a focus on security and optimization.</div>
+                        <div class="section-title"># WORK EXPERIENCE SUMMARY</div>
+                        <div class="job-title">• CEO & Lead IT Consultant (2020-2023)</div>
+                        <div class="job-title">• IT System Administrator (2018-2022)</div>
+                        <div class="job-title">• Student Assistant (2019-2020)</div>
+                    `;
+                    break;
+
+                case 'education':
+                    output.innerHTML = `
+                        <div class="section-title"># EDUCATION</div>
+                        <div class="info-line"><span class="info-label">Master's Degree:</span><span class="info-value">MSc in Computer Science - University of XYZ</span></div>
+                        <div class="info-line"><span class="info-label">Bachelor's Degree:</span><span class="info-value">BSc in Information Technology - ABC University</span></div>
                     `;
                     break;
 
                 case 'projects':
                     output.innerHTML = `
-                        <div class="section-title"># Personal Projects</div>
+                        <div class="section-title"># PERSONAL PROJECTS</div>
                         <div class="job-title">Cloud Automation Scripts</div>
                         <div class="job-description">Developed automation scripts for cloud infrastructure using Python and Bash.</div>
                         <div class="job-title">Security Monitoring Tool</div>
@@ -334,12 +345,22 @@
                     `;
                     break;
 
+                case 'languages':
+                    output.innerHTML = `
+                        <div class="section-title"># LANGUAGES</div>
+                        <div class="info-line"><span class="info-label">English:</span><span class="info-value">Fluent</span></div>
+                        <div class="info-line"><span class="info-label">German:</span><span class="info-value">Native</span></div>
+                        <div class="info-line"><span class="info-label">French:</span><span class="info-value">Intermediate</span></div>
+                    `;
+                    break;
+
                 default:
-                    output.innerHTML = `<span class="info-value">Command not recognized. Type 'help' for a list of commands.</span>`;
+                    output.innerHTML = `<span style="color: #f87171;">Command not found: ${command}</span><br><span style="color: #9ca3af;">Type 'help' to see available commands</span>`;
             }
 
             content.appendChild(output);
             content.scrollTop = content.scrollHeight;
+            commandInput.focus();
         }
 
         commandInput.focus();
